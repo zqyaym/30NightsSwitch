@@ -74,7 +74,21 @@ const resetTasksIfNeeded = () => {
   const today = new Date().toDateString()
   
   if (lastActiveDate !== today) {
+    // 重置任务状态
     eveningTasks.value = eveningTasks.value.map(task => ({ ...task, completed: false }))
+    
+    // 更新天数和连续打卡
+    const yesterdayTasks = taskData.value.find(data => data.date === lastActiveDate)?.tasks || []
+    const allCompleted = yesterdayTasks.length > 0 && yesterdayTasks.every(task => task.completed)
+    
+    if (allCompleted) {
+      streakDays.value++
+      currentDay.value++
+    } else {
+      streakDays.value = 0
+      currentDay.value = 1
+    }
+    
     localStorage.setItem('lastActiveDate', today)
   }
 }

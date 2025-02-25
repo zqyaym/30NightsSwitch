@@ -27,7 +27,7 @@
         :dy="6"
         class="progress-ring__text"
       >
-        第 {{ Math.round(progress / (100/30)) }} 天
+        {{ Math.round(progress) }}%
       </text>
     </svg>
   </div>
