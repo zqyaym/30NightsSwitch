@@ -27,14 +27,14 @@
         :dy="6"
         class="progress-ring__text"
       >
-        {{ Math.round(progress) }}%
+        第 {{ Math.round(progress / (100/30)) }} 天
       </text>
     </svg>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { gsap } from 'gsap'
 
 const props = defineProps({
@@ -55,6 +55,15 @@ const circumference = computed(() => 2 * Math.PI * radius)
 const dashOffset = computed(() => 
   circumference.value - (props.progress / 100) * circumference.value
 )
+
+// 监听进度变化并添加动画
+watch(() => props.progress, (newValue, oldValue) => {
+  gsap.to('.progress-ring__circle', {
+    duration: 0.5,
+    ease: 'power2.out',
+    strokeDashoffset: circumference.value - (newValue / 100) * circumference.value
+  })
+})
 </script>
 
 <style scoped>
